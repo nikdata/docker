@@ -1,0 +1,46 @@
+FROM rocker/tidyverse:4.1.0
+
+LABEL maintainer="Nik Agarwal <gitnik@niks.me>"
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgit2-dev \
+        libxml2-dev \
+        libudunits2-dev \
+        libgdal-dev \
+        libcairo2-dev \
+        libxt-dev \
+        libv8-dev \
+        libpoppler-cpp-dev \
+        libtesseract-dev \
+        libleptonica-dev \
+        tesseract-ocr-eng \
+        libmagick++-dev \
+        libavfilter-dev \
+        libzmq3-dev \
+    	mesa-common-dev \
+    	libglu1-mesa-dev \
+        cargo \
+        curl \
+        tree \
+        jq \
+        htop \
+        texinfo \
+        vim \
+        man-db \
+        less
+
+ENV MRAN_BUILD_DATE=2021-08-01
+
+# Install Basic Utility R Packages
+RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
+	--error \
+	blogdown
+
+RUN Rscript -e "blogdown::install_hugo()"
+
+# Copy over my RStudio Preferences
+COPY rstudio-prefs.json /etc/rstudio/
+
+# expose ports
+EXPOSE 4321
+EXPOSE 4870

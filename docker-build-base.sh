@@ -1,0 +1,1 @@
+docker build --no-cache --file dockerfile.base . -t nikdata/blog:base
