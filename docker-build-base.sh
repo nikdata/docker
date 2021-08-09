@@ -1,1 +1,2 @@
-docker build --no-cache --file dockerfile.base . -t nikdata/blog:base
+docker build --file dockerfile.base . -t nikagarwal/nikdata:base
+docker push nikagarwal/nikdata:base

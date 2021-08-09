@@ -1,6 +1,6 @@
 FROM rocker/tidyverse:4.1.0
 
-LABEL maintainer="Nik Agarwal <web@niks.me>"
+LABEL maintainer='Nik Agarwal <web@niks.me>'
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libgit2-dev \
@@ -30,22 +30,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         man-db \
         less 
 
-# download deb file for HUGO
-RUN curl -L https://github.com/gohugoio/hugo/releases/download/v0.87.0/hugo_0.87.0_Linux-64bit.deb -o hugo.deb
+ENV ENV MRAN_BUILD_DATE=2021-08-01
 
-# install hugo
-RUN apt install ./hugo.deb
-
-# define variable for date (used for R packages)
-ENV MRAN_BUILD_DATE=2021-08-01
-
-# Install Publishing Related R Packages
-RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
-	--error \
-	blogdown \
-    bookdown
-
-# Install utility R packages
+# base packages
 RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
     --error \
     rgl \
@@ -74,29 +61,46 @@ RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
 	pool \
 	skimr \
     DataExplorer \
+    devtools \
+    usethis \
+    testthat
+
+# Parallelization Packages
+RUN install2.R -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
+    --error \
+    foreach \
+    parallel \
+    doParallel 
+
+# Analysis Packages
+RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
+	--error \
+	randomForest \
+	feasts \
+	prophet \
+	qcc \
+	MSQC \
+	Rtsne \
+	strucchange \
+	robfilter \
+	bfast \
+	tsmp \
+	anomalize \
+	slider \
+	dtwclust \
+	fpp3 \
+	astsa \
+	cluster \
+	dendextend \
+	rpart \
+	party \
+	partykit \
+	fable \
+	tidymodels \
+	modeltime \
+	timetk \
+    tsfeatures \
+    e1071 \
     moments \
-    e1071
-
-# Install plotting R packages
-RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
-    --error \
-    lattice \
-	GGally \
-	ggfortify \
-	ggExtra \
-	DiagrammeR \
-	patchwork \
-	plotly \
-	txtplot \
-	billboarder \
-	timevis
-
-# Install toy dataset R packages
-RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
-    --error \
-    palmerpenguins
-
-RUN Rscript -e "blogdown::install_hugo()"
-
-# Copy over my RStudio Preferences
-COPY rstudio-prefs.json /etc/rstudio/
+    ranger \
+    xgboost
