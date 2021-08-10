@@ -75,7 +75,8 @@ RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
 	skimr \
     DataExplorer \
     moments \
-    e1071
+    e1071 \
+	glue
 
 # Install plotting R packages
 RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
@@ -84,6 +85,8 @@ RUN install2.r -r https://cran.microsoft.com/snapshot/${MRAN_BUILD_DATE} \
 	GGally \
 	ggfortify \
 	ggExtra \
+	ggrepel \
+	ggdark \
 	DiagrammeR \
 	patchwork \
 	plotly \

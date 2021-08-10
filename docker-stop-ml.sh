@@ -1,0 +1,1 @@
+docker ps -q --filter ancestor="nikagarwal/nikdata:ml" | xargs docker stop
